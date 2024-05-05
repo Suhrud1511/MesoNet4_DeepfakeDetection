@@ -1,5 +1,3 @@
-
-
 # Import necessary modules
 from flask import Flask, render_template, request
 import io
@@ -17,26 +15,77 @@ app = Flask(__name__)
 # Define image dimensions
 image_dimensions = {'height': 256, 'width': 256, 'channels': 3}
 
-# Define the Classifier class
+### Define the Classifier class
 class Classifier:
+    """
+    A class for defining a generic classifier.
+    """
     def __init__(self):
+        """
+        Constructor method to initialize the classifier.
+        """
         self.model = None
     
     def predict(self, x):
+        """
+        Method to make predictions using the classifier.
+
+        Args:
+            x: Input data for prediction.
+
+        Returns:
+            Prediction made by the classifier.
+        """
         return self.model.predict(x)
     
     def fit(self, x, y):
+        """
+        Method to fit the classifier to the training data.
+
+        Args:
+            x: Input data for training.
+            y: Target labels for training.
+
+        Returns:
+            Training loss and metrics.
+        """
         return self.model.train_on_batch(x, y)
     
     def get_accuracy(self, x, y):
+        """
+        Method to evaluate the accuracy of the classifier.
+
+        Args:
+            x: Input data for evaluation.
+            y: Target labels for evaluation.
+
+        Returns:
+            Accuracy of the classifier.
+        """
         return self.model.test_on_batch(x, y)
     
     def load(self, path):
+        """
+        Method to load pre-trained weights into the classifier.
+
+        Args:
+            path: Path to the pre-trained weights.
+        """
         self.model.load_weights(path)
 
-# Define the Meso4 class
+
+### Define the Meso4 class
 class Meso4(Classifier):
+    """
+    A class for defining the Meso4 model for deepfake detection.
+    """
     def __init__(self, learning_rate=0.001):
+        """
+        Constructor method to initialize the Meso4 model.
+
+        Args:
+            learning_rate: Learning rate for model optimization.
+        """
         self.model = self.init_model()
         optimizer = Adam(lr=learning_rate)
         self.model.compile(optimizer=optimizer,
@@ -44,6 +93,12 @@ class Meso4(Classifier):
                            metrics=['accuracy'])
     
     def init_model(self): 
+        """
+        Method to initialize the Meso4 model architecture.
+
+        Returns:
+            Initialized Meso4 model.
+        """
         x = Input(shape=(image_dimensions['height'],
                          image_dimensions['width'],
                          image_dimensions['channels']))
@@ -80,6 +135,9 @@ meso.load('./weights/Meso4_DF')
 # Define route for home page
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    """
+    Route for uploading a file for deepfake detection.
+    """
     if request.method == 'POST':
         # Get the file from the request
         file = request.files['file']
@@ -114,7 +172,3 @@ def upload_file():
 if __name__ == '__main__':
     # Run the Flask application
     app.run(debug=True)
-
-
-
-
