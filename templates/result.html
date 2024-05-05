@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deepfake Detection Result</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a1a1a;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .image-container {
+      position: relative;
+      width: 600px;
+      border: 2px solid #FFFFFF;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .bounding-box {
+      position: absolute;
+      border: 2px solid;
+      box-sizing: border-box;
+    }
+
+    .label {
+      position: absolute;
+      background-color: #FFFFFF;
+      padding: 5px;
+      font-weight: bold;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .real-box {
+      border-color: #34d399;
+    }
+
+    .fake-box {
+      border-color: #ef4444;
+    }
+
+    .confidence-container {
+      background-color: #000000;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 20px;
+      color: #FFFFFF;
+    }
+
+    .back-button {
+      background-color: #2563eb;
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #ef4444;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="image-container">
+      <img src="data:image/jpeg;base64,{{ image }}" class="image">
+      <div class="bounding-box {% if prediction == 'Real' %}real-box{% else %}fake-box{% endif %}"
+        style="top: {{ top }}%; left: {{ left }}%; width: {{ width }}%; height: {{ height }}%;">
+      </div>
+      <div class="label" style="top: {{ top }}%; left: {{ left }}%;">
+        {{ prediction }}
+      </div>
+    </div>
+    <div class="confidence-container">
+      <p class="confidence">Confidence: {{ confidence }}</p>
+    </div>
+    <button class="back-button" onclick="window.history.back()">Back</button>
+  </div>
+</body>
+
+</html>
